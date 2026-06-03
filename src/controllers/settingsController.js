@@ -4,16 +4,42 @@ import ApiResponse from '../utils/ApiResponse.js';
 import asyncHandler from '../utils/asyncHandler.js';
 import { deleteFromCloudinary } from '../config/cloudinary.js';
 
+const DEFAULT_PAYMENT_METHODS = [
+  { key: 'razorpay', label: 'Online Payment (Razorpay)', description: 'Pay securely via UPI, cards, or netbanking', isActive: true, order: 1 },
+  { key: 'cod', label: 'Cash on Delivery', description: 'Pay in cash when your order is delivered', isActive: true, order: 2 },
+];
+
+const ensurePaymentMethods = async (settings) => {
+  if (!settings.paymentMethods || settings.paymentMethods.length === 0) {
+    settings.paymentMethods = DEFAULT_PAYMENT_METHODS;
+    await settings.save();
+  }
+  return settings;
+};
+
 export const getPublicSettings = asyncHandler(async (req, res) => {
   let settings = await StoreSettings.findOne();
-  if (!settings) settings = await StoreSettings.create({});
+  if (!settings) settings = await StoreSettings.create({ paymentMethods: DEFAULT_PAYMENT_METHODS });
+  await ensurePaymentMethods(settings);
   return ApiResponse.success(res, settings);
 });
 
 export const getStoreSettings = asyncHandler(async (req, res) => {
   let settings = await StoreSettings.findOne();
-  if (!settings) settings = await StoreSettings.create({});
+  if (!settings) settings = await StoreSettings.create({ paymentMethods: DEFAULT_PAYMENT_METHODS });
+  await ensurePaymentMethods(settings);
   return ApiResponse.success(res, settings);
+});
+
+export const updatePaymentMethods = asyncHandler(async (req, res) => {
+  const { paymentMethods } = req.body;
+  if (!Array.isArray(paymentMethods)) throw new ApiError(400, 'paymentMethods must be an array');
+  const settings = await StoreSettings.findOneAndUpdate(
+    {},
+    { $set: { paymentMethods } },
+    { new: true, upsert: true },
+  );
+  return ApiResponse.success(res, settings, 'Payment methods updated');
 });
 
 export const updateStoreSettings = asyncHandler(async (req, res) => {
@@ -98,6 +124,7 @@ export const setSetting = asyncHandler(async (req, res) => {
 
 export default {
   getPublicSettings, getStoreSettings, updateStoreSettings,
+  updatePaymentMethods,
   updateHeroBanners, updateGallery, updateSection,
   getSettings, setSetting,
 };

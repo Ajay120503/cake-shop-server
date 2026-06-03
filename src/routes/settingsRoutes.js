@@ -12,6 +12,7 @@ router.put('/', protect, adminOnly, uploadSingle('logo'), settingsCtrl.updateSto
 router.put('/hero-banners', protect, adminOnly, upload.any(), settingsCtrl.updateHeroBanners);
 router.put('/gallery', protect, adminOnly, settingsCtrl.updateGallery);
 router.put('/section', protect, adminOnly, settingsCtrl.updateSection);
+router.put('/payment-methods', protect, adminOnly, settingsCtrl.updatePaymentMethods);
 router.get('/all', protect, adminOnly, settingsCtrl.getSettings);
 router.put('/key', protect, adminOnly, settingsCtrl.setSetting);
 

@@ -84,6 +84,16 @@ const storeSettingsSchema = new mongoose.Schema(
     shippingCharge: { type: Number, default: 50 },
     freeShippingThreshold: { type: Number, default: 500 },
     taxPercent: { type: Number, default: 5 },
+    // Payment methods
+    paymentMethods: [
+      {
+        key: { type: String, required: true },
+        label: { type: String, required: true },
+        description: String,
+        isActive: { type: Boolean, default: true },
+        order: { type: Number, default: 0 },
+      },
+    ],
     // Loyalty
     loyaltyPointsPerRupee: { type: Number, default: 0.1 },
     loyaltySignupBonus: { type: Number, default: 100 },

@@ -5,8 +5,8 @@ import asyncHandler from '../utils/asyncHandler.js';
 import { deleteFromCloudinary } from '../config/cloudinary.js';
 
 const DEFAULT_PAYMENT_METHODS = [
-  { key: 'razorpay', label: 'Online Payment (Razorpay)', description: 'Pay securely via UPI, cards, or netbanking', isActive: true, order: 1 },
-  { key: 'cod', label: 'Cash on Delivery', description: 'Pay in cash when your order is delivered', isActive: true, order: 2 },
+  { key: 'Razorpay', label: 'Online Payment (Razorpay)', description: 'Pay securely via UPI, cards, or netbanking', isActive: true, order: 1 },
+  { key: 'COD', label: 'Cash on Delivery', description: 'Pay in cash when your order is delivered', isActive: true, order: 2 },
 ];
 
 const ensurePaymentMethods = async (settings) => {

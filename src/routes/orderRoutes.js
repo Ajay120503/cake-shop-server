@@ -20,7 +20,7 @@ router.post(
     body('shippingAddress.city').notEmpty(),
     body('shippingAddress.state').notEmpty(),
     body('shippingAddress.postalCode').notEmpty(),
-    body('paymentMethod').isIn(['Razorpay', 'COD', 'UPI']),
+    body('paymentMethod').trim().notEmpty().isLength({ min: 1, max: 50 }),
     validate,
   ],
   orderCtrl.createOrder,
